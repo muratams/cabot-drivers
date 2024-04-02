@@ -71,6 +71,7 @@ def generate_launch_description():
     use_standalone_wifi_scanner = LaunchConfiguration('use_standalone_wifi_scanner')
     odrive_left_serial_number = LaunchConfiguration('odrive_left_serial_number')
     odrive_right_serial_number = LaunchConfiguration('odrive_right_serial_number')
+    imu_adjust_rpy = LaunchConfiguration('imu_adjust_rpy')
 
     # switch lidar node based on model_name
     use_hesai = PythonExpression(['"', model_name, '" in ["cabot3-ace2"]'])
@@ -83,7 +84,9 @@ def generate_launch_description():
     ])
 
     robot_description = ParameterValue(
-        Command(['xacro ', xacro_for_cabot_model, ' offset:=0.25', ' sim:=', use_sim_time]),
+        Command(['xacro ', xacro_for_cabot_model, ' offset:=0.25', ' sim:=', use_sim_time,
+                 ' imu_adjust_rpy:="', imu_adjust_rpy, '"'
+                 ]),
         value_type=str
     )
 
@@ -159,6 +162,11 @@ def generate_launch_description():
             'odrive_right_serial_number',
             default_value=EnvironmentVariable('CABOT_ODRIVER_SERIAL_1', default_value='yyyy'),
             description='Set odrive serial number (right wheel)'
+        ),
+        DeclareLaunchArgument(
+            'imu_adjust_rpy',
+            default_value=EnvironmentVariable('CABOT_IMU_ADJUST_RPY', default_value='0 0 0'),
+            description='Set IMU rotation (roll, pitch and yaw) adjustment, like "0 0 0"'
         ),
 
         # Kind error message

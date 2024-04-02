@@ -27,6 +27,7 @@ cabot:
   cabot_serial:
     ros__parameters:
       port: /dev/ttyESP32
+      imu_frame: imu_adjusted
 
   odriver_adapter_node:
     ros__parameters:
